@@ -1,0 +1,31 @@
+swagger:
+  host: localhost:8080
+  base-path: /@project.artifactId@
+
+server:
+  port: 8080
+  servlet:
+    context-path: /@project.artifactId@
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: none
+        default_schema: appointments
+
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+
+  sql:
+    init:
+      continue-on-error: true
