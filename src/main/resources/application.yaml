@@ -26,6 +26,12 @@ spring:
     username: postgres
     password: postgres
 
+  flyway:
+    enabled: true
+    locations: classpath:/db/migration
+    baselineOnMigrate: true
+    schemas: appointments
+
   sql:
     init:
       continue-on-error: true
