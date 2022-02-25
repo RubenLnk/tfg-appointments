@@ -74,6 +74,12 @@
 			<artifactId>flyway-core</artifactId>
 		</dependency>
 
+		<!-- SLF4J -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
