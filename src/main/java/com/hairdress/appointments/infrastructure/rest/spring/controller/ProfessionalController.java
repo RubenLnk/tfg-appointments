@@ -1,6 +1,7 @@
-package com.hairdress.appointments.infrastructure.rest.spring.controllers;
+package com.hairdress.appointments.infrastructure.rest.spring.controller;
 
 import com.hairdress.appointments.infrastructure.bbdd.models.Professional;
+import com.hairdress.appointments.infrastructure.rest.spring.controller.response.ErrorResponseDto;
 import com.hairdress.appointments.infrastructure.service.ProfessionalService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,9 +28,9 @@ public class ProfessionalController {
   @ApiOperation("Get professional by his ID")
   @ApiResponses({
       @ApiResponse(code = 200, message = "OK", response = Professional.class),
-      @ApiResponse(code = 400, message = "Bad request error"),
-      @ApiResponse(code = 404, message = "Professional not found"),
-      @ApiResponse(code = 503, message = "Server not available")
+      @ApiResponse(code = 400, message = "Bad request error", response = ErrorResponseDto.class),
+      @ApiResponse(code = 404, message = "Professional not found", response = ErrorResponseDto.class),
+      @ApiResponse(code = 503, message = "Server not available", response = ErrorResponseDto.class)
   })
   @GetMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Professional> getById(
@@ -41,9 +42,9 @@ public class ProfessionalController {
   @ApiOperation("Get all professionals")
   @ApiResponses({
       @ApiResponse(code = 200, message = "OK", response = Professional.class),
-      @ApiResponse(code = 400, message = "Bad request error"),
-      @ApiResponse(code = 404, message = "Professional not found"),
-      @ApiResponse(code = 503, message = "Server not available")
+      @ApiResponse(code = 400, message = "Bad request error", response = ErrorResponseDto.class),
+      @ApiResponse(code = 404, message = "Professional not found", response = ErrorResponseDto.class),
+      @ApiResponse(code = 503, message = "Server not available", response = ErrorResponseDto.class)
   })
   @GetMapping(value="/", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<Professional>> getById() {

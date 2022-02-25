@@ -31,3 +31,14 @@ spring:
   sql:
     init:
       continue-on-error: true
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework.cloud.bootstrap.config: INFO
+      hibernate:
+        type.descriptor.sql:
+          BasicBinder: TRACE
+          BasicExtractor: INFO
+    com.hairdress: DEBUG

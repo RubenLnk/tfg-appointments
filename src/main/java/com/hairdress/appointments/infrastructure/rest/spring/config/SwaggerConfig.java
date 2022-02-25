@@ -28,7 +28,7 @@ public class SwaggerConfig {
                 .directModelSubstitute(java.sql.Timestamp.class, java.sql.Timestamp.class)
                 .select()
                 .apis(RequestHandlerSelectors
-                        .basePackage("com.hairdress.appointments.infrastructure.rest.spring.controllers"))
+                        .basePackage("com.hairdress.appointments.infrastructure.rest.spring.controller"))
                 .build()
                 .apiInfo(apiInfo);
     }
