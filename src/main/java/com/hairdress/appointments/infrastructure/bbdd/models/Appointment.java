@@ -30,38 +30,38 @@ public class Appointment {
   private Long id;
 
   @Column(name = "fecha_cita")
-  private Timestamp fecha;
+  private Timestamp appointmentDate;
 
   @Column(name = "precio")
-  private Double precio;
+  private Double price;
 
   @Column(name = "observaciones")
-  private String observaciones;
+  private String observations;
 
   @ManyToOne
   @JoinColumn(name="cliente_id")
-  private Customer cliente;
+  private Customer customer;
 
   @ManyToOne
   @JoinColumn(name = "profesional_creador")
-  private Professional profesionalCreador;
+  private Professional creatorProfessional;
 
   @Column(name = "activo")
-  private Boolean activo;
+  private Boolean active;
 
   @Column(name = "fecha_creacion")
-  private Timestamp fechaCreacion;
+  private Timestamp creationDate;
 
   @Column(name = "fecha_modificacion")
-  private Timestamp fechaModificacion;
+  private Timestamp modifyDate;
 
   @Column(name = "fecha_anulacion")
-  private Timestamp fechaAnulacion;
+  private Timestamp cancellationDate;
 
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(
       name = "servicio_cita",
       joinColumns = @JoinColumn(name = "cita_id"),
       inverseJoinColumns = @JoinColumn(name = "servicio_id"))
-  private List<Service> servicios;
+  private List<Service> services;
 }

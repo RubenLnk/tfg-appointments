@@ -10,11 +10,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 @Data
 @NoArgsConstructor
@@ -34,21 +36,24 @@ public class Professional implements Serializable {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "salt")
+    private String salt;
+
     @Column(name = "nombre")
-    private String nombre;
+    private String name;
 
     @Column(name = "apellido1")
-    private String apellido1;
+    private String surname1;
 
     @Column(name = "apellido2")
-    private String apellido2;
+    private String surname2;
 
     @Column(name = "fecha_creacion")
-    private Timestamp fechaCreacion;
+    private Timestamp creationDate;
 
     @Column(name = "fecha_modificacion")
-    private Timestamp fechaModificacion;
+    private Timestamp modifyDate;
 
-    @OneToMany(mappedBy = "profesionalCreador", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Appointment> citasCreadas;
+    @OneToMany(mappedBy = "creatorProfessional", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Appointment> appointmentsCreated;
 }

@@ -28,29 +28,32 @@ public class Customer {
   private Long id;
 
   @Column(name = "nombre")
-  private String nombre;
+  private String name;
 
   @Column(name = "apellido1")
-  private String apellido1;
+  private String surname1;
 
   @Column(name = "apellido2")
-  private String apellido2;
+  private String surname2;
 
   @Column(name = "telefono")
-  private String telefono;
+  private String phone;
 
   @Column(name = "correo")
-  private String correo;
+  private String email;
 
   @Column(name = "password")
   private String password;
 
+  @Column(name = "salt")
+  private String salt;
+
   @Column(name = "fecha_creacion")
-  private Timestamp fechaCreacion;
+  private Timestamp creationDate;
 
   @Column(name = "fecha_modificacion")
-  private Timestamp fechaModificacion;
+  private Timestamp modifyDate;
 
-  @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  private List<Appointment> citas;
+  @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<Appointment> appointments;
 }

@@ -8,9 +8,9 @@ import lombok.Data;
 @AllArgsConstructor
 public class ErrorResponseDto {
 
-  @ApiModelProperty(value = "Error code", example = "XXX")
+  @ApiModelProperty(value = "Código de error", example = "XXX")
   private String code;
 
-  @ApiModelProperty(value = "Error description", example = "Resource Not Found")
+  @ApiModelProperty(value = "Descripción del error", example = "Resource Not Found")
   private String description;
 }
