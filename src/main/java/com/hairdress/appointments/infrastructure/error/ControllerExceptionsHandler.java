@@ -1,6 +1,9 @@
 package com.hairdress.appointments.infrastructure.error;
 
+import com.hairdress.appointments.infrastructure.error.exception.AuthorizationException;
+import com.hairdress.appointments.infrastructure.error.exception.GenericException;
 import com.hairdress.appointments.infrastructure.error.exception.ModelNotFoundException;
+import com.hairdress.appointments.infrastructure.error.exception.UserAlreadyExistsException;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.response.ErrorResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,28 @@ public class ControllerExceptionsHandler {
 
   private static final String ERROR_MESSAGE = "errorMessage";
 
+  @ExceptionHandler({AuthorizationException.class})
+  public ResponseEntity<ErrorResponseDto> errorUnauthorizedExceptionHandler(Exception e) {
+    var msg = e.getMessage();
+    log.debug("Exception Handler - UnauthorizedException - {}", msg);
+
+    return ResponseEntity
+        .status(HttpStatus.UNAUTHORIZED)
+        .header(ERROR_MESSAGE, msg)
+        .body(new ErrorResponseDto(String.valueOf(HttpStatus.UNAUTHORIZED.value()), msg));
+  }
+
+  @ExceptionHandler({UserAlreadyExistsException.class})
+  public ResponseEntity<ErrorResponseDto> errorBadRequestExceptionHandler(Exception e) {
+    var msg = e.getMessage();
+    log.debug("Exception Handler - BadRequestException - {}", msg);
+
+    return ResponseEntity
+        .status(HttpStatus.BAD_REQUEST)
+        .header(ERROR_MESSAGE, msg)
+        .body(new ErrorResponseDto(String.valueOf(HttpStatus.BAD_REQUEST.value()), msg));
+  }
+
   @ExceptionHandler({ModelNotFoundException.class})
   public ResponseEntity<ErrorResponseDto> errorNotFoundExceptionHandler(Exception e) {
     var msg = e.getMessage();
@@ -23,6 +48,17 @@ public class ControllerExceptionsHandler {
         .status(HttpStatus.NOT_FOUND)
         .header(ERROR_MESSAGE, msg)
         .body(new ErrorResponseDto(String.valueOf(HttpStatus.NOT_FOUND.value()), msg));
+  }
+
+  @ExceptionHandler({GenericException.class, Exception.class})
+  public ResponseEntity<ErrorResponseDto> errorNotControlledExceptions(Exception e) {
+    var msg = e.getMessage();
+    log.error("Exception Handler - NotControlledExceptions - {}", msg, e);
+
+    return ResponseEntity
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .header(ERROR_MESSAGE, msg)
+        .body(new ErrorResponseDto(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), msg));
   }
 
 }

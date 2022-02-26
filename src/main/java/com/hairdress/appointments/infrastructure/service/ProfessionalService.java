@@ -8,4 +8,8 @@ public interface ProfessionalService {
   Professional findById(Long id);
 
   List<Professional> findAll();
+
+  Professional signUp(Professional professionalToSignUp);
+
+  void login(String uid, String password);
 }

@@ -3,7 +3,8 @@ set search_path=appointments;
 create table profesionales (
     profesional_id serial primary key,
     uid varchar(20) not null,
-    password bytea not null,
+    password varchar not null,
+    salt varchar not null,
     nombre varchar(30) not null,
     apellido1 varchar(30) not null,
     apellido2 varchar(30),
@@ -18,7 +19,8 @@ create table clientes (
     apellido2 varchar(30),
     telefono varchar(30) unique not null,
     correo varchar(50) unique,
-    password bytea not null,
+    password varchar not null,
+    salt varchar not null,
     fecha_creacion timestamp not null,
     fecha_modificacion timestamp not null
 );

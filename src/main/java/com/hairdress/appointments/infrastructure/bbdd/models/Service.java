@@ -20,24 +20,24 @@ public class Service {
 
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Id
-  @Column(name = "profesional_id", unique = true, nullable = false, updatable = false)
+  @Column(name = "servicio_id", unique = true, nullable = false, updatable = false)
   private Long id;
 
   @Column(name = "nombre")
-  private String nombre;
+  private String name;
 
   @Column(name = "descripcion")
-  private String descripcion;
+  private String description;
 
   @Column(name = "precio")
-  private Double precio;
+  private Double price;
 
   @Column(name = "duracion")
-  private Integer duracion;
+  private Integer duration;
 
   @Column(name = "fecha_creacion")
-  private Timestamp fechaCreacion;
+  private Timestamp creationDate;
 
   @Column(name = "fecha_modificacion")
-  private Timestamp fechaModificacion;
+  private Timestamp modifyDate;
 }

@@ -2,7 +2,6 @@ package com.hairdress.appointments.infrastructure.rest.spring.controller.respons
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,23 +11,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProfessionalResponseDto {
 
-  @ApiModelProperty(value = "Professional ID", example = "57")
+  @ApiModelProperty(value = "ID del profesional", example = "57")
   @JsonProperty("id")
   private Long id;
 
-  @ApiModelProperty(value = "Professional user id", example = "rjr17")
+  @ApiModelProperty(value = "UID del profesional", example = "rjr17")
   @JsonProperty("uid")
   private String uid;
 
-  @ApiModelProperty(value = "Professional name", example = "Juan")
+  @ApiModelProperty(value = "Nombre del profesional", example = "Juan")
   @JsonProperty("name")
-  private String nombre;
+  private String name;
 
-  @ApiModelProperty(value = "Professional first surname", example = "Fernandez")
+  @ApiModelProperty(value = "Primer apellido del profesional", example = "Fernandez")
   @JsonProperty("surname1")
-  private String apellido1;
+  private String surname1;
 
-  @ApiModelProperty(value = "Professional second surname", example = "Lozano")
+  @ApiModelProperty(value = "Segundo apellido del profesional", example = "Lozano")
   @JsonProperty("surname2")
-  private String apellido2;
+  private String surname2;
 }
