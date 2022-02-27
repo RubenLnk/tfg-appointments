@@ -53,7 +53,7 @@ public class Appointment {
   private Timestamp creationDate;
 
   @Column(name = "fecha_modificacion")
-  private Timestamp modifyDate;
+  private Timestamp modificationDate;
 
   @Column(name = "fecha_anulacion")
   private Timestamp cancellationDate;
