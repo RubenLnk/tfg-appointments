@@ -39,5 +39,5 @@ public class Service {
   private Timestamp creationDate;
 
   @Column(name = "fecha_modificacion")
-  private Timestamp modifyDate;
+  private Timestamp modificationDate;
 }

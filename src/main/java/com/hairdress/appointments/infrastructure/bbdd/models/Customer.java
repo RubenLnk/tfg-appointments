@@ -52,7 +52,7 @@ public class Customer {
   private Timestamp creationDate;
 
   @Column(name = "fecha_modificacion")
-  private Timestamp modifyDate;
+  private Timestamp modificationDate;
 
   @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<Appointment> appointments;

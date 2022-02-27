@@ -12,4 +12,6 @@ public interface ProfessionalService {
   Professional signUp(Professional professionalToSignUp);
 
   void login(String uid, String password);
+
+  void changePassword(String uid, String oldPassword, String newPassword);
 }

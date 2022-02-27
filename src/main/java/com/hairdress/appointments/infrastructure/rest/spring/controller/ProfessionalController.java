@@ -1,7 +1,7 @@
 package com.hairdress.appointments.infrastructure.rest.spring.controller;
 
-import com.hairdress.appointments.infrastructure.bbdd.models.Professional;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.mapper.ProfessionalMapper;
+import com.hairdress.appointments.infrastructure.rest.spring.controller.request.PasswordChangeRequestDto;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.request.SignInProfessionalRequestDto;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.request.SignUpProfessionalRequestDto;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.response.ErrorResponseDto;
@@ -94,4 +94,23 @@ public class ProfessionalController {
 
     return HttpStatus.OK.value();
   }
+
+  @ApiOperation("Cambio de contraseña del profesional")
+  @ApiResponses({
+      @ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Datos proporcionados no válidos", response = ErrorResponseDto.class),
+      @ApiResponse(code = 404, message = "Profesional no encontrado", response = ErrorResponseDto.class),
+      @ApiResponse(code = 503, message = "Servicio no disponible", response = ErrorResponseDto.class)
+  })
+  @PostMapping(value="/change-password", consumes = MediaType.APPLICATION_JSON_VALUE)
+  public int changePassword(@ApiParam(name = "professional", value = "JSON con los datos de cambio"
+      + " de contraseña del profesional", required = true)
+  @RequestBody PasswordChangeRequestDto professionalData) {
+
+    service.changePassword(professionalData.getUid(), professionalData.getOldPassword(),
+        professionalData.getNewPassword());
+
+    return HttpStatus.OK.value();
+  }
+
 }

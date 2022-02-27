@@ -10,13 +10,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 
 @Data
 @NoArgsConstructor
@@ -52,7 +50,7 @@ public class Professional implements Serializable {
     private Timestamp creationDate;
 
     @Column(name = "fecha_modificacion")
-    private Timestamp modifyDate;
+    private Timestamp modificationDate;
 
     @OneToMany(mappedBy = "creatorProfessional", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Appointment> appointmentsCreated;

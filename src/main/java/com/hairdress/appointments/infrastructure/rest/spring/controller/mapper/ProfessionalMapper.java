@@ -6,7 +6,6 @@ import com.hairdress.appointments.infrastructure.rest.spring.controller.response
 import java.sql.Timestamp;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface ProfessionalMapper {
@@ -14,7 +13,7 @@ public interface ProfessionalMapper {
   ProfessionalResponseDto toDto(Professional source);
 
   @Mapping(target = "creationDate", expression = "java(timestampNow())")
-  @Mapping(target = "modifyDate", expression = "java(timestampNow())")
+  @Mapping(target = "modificationDate", expression = "java(timestampNow())")
   Professional signUpRequestToEntity(SignUpProfessionalRequestDto source);
 
   default Timestamp timestampNow() {
