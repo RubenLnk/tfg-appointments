@@ -14,4 +14,8 @@ public interface ProfessionalService {
   void login(String uid, String password);
 
   void changePassword(String uid, String oldPassword, String newPassword);
+
+  Professional update(Long id, Professional updateProfessional);
+
+  void delete(Long id);
 }

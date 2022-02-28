@@ -8,6 +8,10 @@ import com.hairdress.appointments.infrastructure.rest.spring.controller.response
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -48,6 +52,35 @@ public class ControllerExceptionsHandler {
         .status(HttpStatus.NOT_FOUND)
         .header(ERROR_MESSAGE, msg)
         .body(new ErrorResponseDto(String.valueOf(HttpStatus.NOT_FOUND.value()), msg));
+  }
+
+  @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})
+  public ResponseEntity<ErrorResponseDto> errorValidationExceptionHandler(Exception e) {
+    var msg = e.getMessage();
+    log.debug("Exception Handler - ValidationException - {}", msg);
+
+    BindingResult br = null;
+
+    if (e instanceof MethodArgumentNotValidException) {
+      br = ((MethodArgumentNotValidException) e).getBindingResult();
+    } else {
+      br = ((BindException) e).getBindingResult();
+    }
+
+    BindingResult finalBr = br;
+
+    try {
+      var wrongAttribute = ((FieldError) finalBr.getAllErrors().get(0)).getField();
+      var errorMessage = finalBr.getAllErrors().get(0).getDefaultMessage();
+      msg = wrongAttribute + " - " + errorMessage;
+    } catch (Exception e2) {
+      msg = e.getMessage();
+    }
+
+    return ResponseEntity
+        .status(HttpStatus.BAD_REQUEST)
+        .header(ERROR_MESSAGE, msg)
+        .body(new ErrorResponseDto(String.valueOf(HttpStatus.BAD_REQUEST.value()), msg));
   }
 
   @ExceptionHandler({GenericException.class, Exception.class})
