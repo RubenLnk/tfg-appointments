@@ -6,6 +6,7 @@ import com.hairdress.appointments.infrastructure.error.exception.AuthorizationEx
 import com.hairdress.appointments.infrastructure.error.exception.GenericException;
 import com.hairdress.appointments.infrastructure.error.exception.ModelNotFoundException;
 import com.hairdress.appointments.infrastructure.error.exception.UserAlreadyExistsException;
+import com.hairdress.appointments.infrastructure.rest.spring.controller.mapper.ProfessionalMapper;
 import com.hairdress.appointments.infrastructure.security.SecurePasswordStorage;
 import com.hairdress.appointments.infrastructure.service.ProfessionalService;
 import java.sql.Timestamp;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 public class ProfessionalServiceImpl implements ProfessionalService {
 
   private final ProfessionalRepository repository;
+  private final ProfessionalMapper mapper;
 
   @Override
   public Professional findById(Long id) {
@@ -142,5 +144,34 @@ public class ProfessionalServiceImpl implements ProfessionalService {
     }
 
     repository.save(professional);
+  }
+
+  @Override
+  @Transactional
+  public Professional update(Long id, Professional updateProfessional) {
+
+    Optional<Professional> opt = repository.findById(id);
+
+    if (opt.isEmpty()) {
+      log.error("No se pudo encontrar en la BD el profesional con id: {}", id);
+      throw new ModelNotFoundException("No se pudo encontrar al profesional con id: " + id);
+    }
+
+    var professionalToSave = mapper.updateProfessionalData(updateProfessional, opt.get());
+
+    return repository.save(professionalToSave);
+  }
+
+  @Override
+  @Transactional
+  public void delete(Long id) {
+    Optional<Professional> opt = repository.findById(id);
+
+    if (opt.isEmpty()) {
+      log.error("No se pudo encontrar en la BD el profesional con id: {}", id);
+      throw new ModelNotFoundException("No se pudo encontrar al profesional con id: " + id);
+    }
+
+    repository.delete(opt.get());
   }
 }
