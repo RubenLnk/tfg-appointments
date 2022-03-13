@@ -136,7 +136,6 @@ public class ProfessionalServiceImpl implements ProfessionalService {
 
       professional.setSalt(newSalt);
       professional.setPassword(newEncryptedPassword);
-      professional.setModificationDate(new Timestamp(System.currentTimeMillis()));
     } catch (Exception e) {
       log.error("Se ha producido un error al generar la nueva contraseña del profesional", e);
       throw new GenericException("Se ha producido un error inesperado al cambiar la contraseña",
