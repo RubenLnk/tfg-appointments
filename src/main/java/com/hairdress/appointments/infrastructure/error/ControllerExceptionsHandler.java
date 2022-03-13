@@ -1,6 +1,7 @@
 package com.hairdress.appointments.infrastructure.error;
 
 import com.hairdress.appointments.infrastructure.error.exception.AuthorizationException;
+import com.hairdress.appointments.infrastructure.error.exception.BadRequestException;
 import com.hairdress.appointments.infrastructure.error.exception.GenericException;
 import com.hairdress.appointments.infrastructure.error.exception.ModelNotFoundException;
 import com.hairdress.appointments.infrastructure.error.exception.UserAlreadyExistsException;
@@ -32,7 +33,7 @@ public class ControllerExceptionsHandler {
         .body(new ErrorResponseDto(String.valueOf(HttpStatus.UNAUTHORIZED.value()), msg));
   }
 
-  @ExceptionHandler({UserAlreadyExistsException.class})
+  @ExceptionHandler({UserAlreadyExistsException.class, BadRequestException.class})
   public ResponseEntity<ErrorResponseDto> errorBadRequestExceptionHandler(Exception e) {
     var msg = e.getMessage();
     log.debug("Exception Handler - BadRequestException - {}", msg);
