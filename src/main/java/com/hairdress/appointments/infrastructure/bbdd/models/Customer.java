@@ -48,6 +48,12 @@ public class Customer {
   @Column(name = "salt")
   private String salt;
 
+  @Column(name = "alta")
+  private Boolean registered;
+
+  @Column(name = "primera_conexion")
+  private Boolean firstConnection;
+
   @Column(name = "fecha_creacion")
   private Timestamp creationDate;
 

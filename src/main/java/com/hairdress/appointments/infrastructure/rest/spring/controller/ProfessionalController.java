@@ -1,7 +1,7 @@
 package com.hairdress.appointments.infrastructure.rest.spring.controller;
 
 import com.hairdress.appointments.infrastructure.rest.spring.controller.mapper.ProfessionalMapper;
-import com.hairdress.appointments.infrastructure.rest.spring.controller.request.PasswordChangeRequestDto;
+import com.hairdress.appointments.infrastructure.rest.spring.controller.request.PasswordChangeProfessionalRequestDto;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.request.SignInProfessionalRequestDto;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.request.SignUpProfessionalRequestDto;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.request.UpdateProfessionalRequestDto;
@@ -44,7 +44,7 @@ public class ProfessionalController {
       @ApiResponse(code = 200, message = "OK", response = ProfessionalResponseDto.class),
       @ApiResponse(code = 400, message = "Datos proporcionados no válidos", response = ErrorResponseDto.class),
       @ApiResponse(code = 404, message = "Profesional no encontrado", response = ErrorResponseDto.class),
-      @ApiResponse(code = 503, message = "Servicio no disponible", response = ErrorResponseDto.class)
+      @ApiResponse(code = 500, message = "Servicio no disponible", response = ErrorResponseDto.class)
   })
   @GetMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ProfessionalResponseDto> getById(
@@ -58,9 +58,9 @@ public class ProfessionalController {
       @ApiResponse(code = 200, message = "OK", response = ProfessionalResponseDto.class),
       @ApiResponse(code = 400, message = "Datos proporcionados no válidos", response = ErrorResponseDto.class),
       @ApiResponse(code = 404, message = "Profesional no encontrado", response = ErrorResponseDto.class),
-      @ApiResponse(code = 503, message = "Servicio no disponible", response = ErrorResponseDto.class)
+      @ApiResponse(code = 500, message = "Servicio no disponible", response = ErrorResponseDto.class)
   })
-  @GetMapping(value="/", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value="", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<ProfessionalResponseDto>> getAll() {
     return ResponseEntity.ok().body(service.findAll().stream().map(mapper::toDto)
         .collect(Collectors.toList()));
@@ -71,13 +71,13 @@ public class ProfessionalController {
       @ApiResponse(code = 200, message = "OK", response = ProfessionalResponseDto.class),
       @ApiResponse(code = 400, message = "Datos proporcionados no válidos", response = ErrorResponseDto.class),
       @ApiResponse(code = 404, message = "Profesional no encontrado", response = ErrorResponseDto.class),
-      @ApiResponse(code = 503, message = "Servicio no disponible", response = ErrorResponseDto.class)
+      @ApiResponse(code = 500, message = "Servicio no disponible", response = ErrorResponseDto.class)
   })
   @PostMapping(value="/signup", produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ProfessionalResponseDto> singUp(@ApiParam(name = "professional",
       value = "JSON con datos del profesional", required = true)
-      @RequestBody SignUpProfessionalRequestDto professional) {
+      @Valid @RequestBody SignUpProfessionalRequestDto professional) {
 
     return ResponseEntity.ok().body(mapper.toDto(
         service.signUp(mapper.signUpRequestToEntity(professional))));
@@ -88,12 +88,12 @@ public class ProfessionalController {
       @ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 400, message = "Datos proporcionados no válidos", response = ErrorResponseDto.class),
       @ApiResponse(code = 404, message = "Profesional no encontrado", response = ErrorResponseDto.class),
-      @ApiResponse(code = 503, message = "Servicio no disponible", response = ErrorResponseDto.class)
+      @ApiResponse(code = 500, message = "Servicio no disponible", response = ErrorResponseDto.class)
   })
   @PostMapping(value="/login", consumes = MediaType.APPLICATION_JSON_VALUE)
   public int login(@ApiParam(name = "professional", value = "JSON con los datos de ingreso"
       + " del profesional", required = true)
-      @RequestBody SignInProfessionalRequestDto professional) {
+      @Valid @RequestBody SignInProfessionalRequestDto professional) {
 
     service.login(professional.getUid(), professional.getPassword());
 
@@ -105,12 +105,12 @@ public class ProfessionalController {
       @ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 400, message = "Datos proporcionados no válidos", response = ErrorResponseDto.class),
       @ApiResponse(code = 404, message = "Profesional no encontrado", response = ErrorResponseDto.class),
-      @ApiResponse(code = 503, message = "Servicio no disponible", response = ErrorResponseDto.class)
+      @ApiResponse(code = 500, message = "Servicio no disponible", response = ErrorResponseDto.class)
   })
   @PatchMapping(value="/change-password", consumes = MediaType.APPLICATION_JSON_VALUE)
   public int changePassword(@ApiParam(name = "professional", value = "JSON con los datos de cambio"
       + " de contraseña del profesional", required = true)
-  @Valid @RequestBody PasswordChangeRequestDto request) {
+  @Valid @RequestBody PasswordChangeProfessionalRequestDto request) {
 
     service.changePassword(request.getUid(), request.getOldPassword(),
         request.getNewPassword());
@@ -123,12 +123,12 @@ public class ProfessionalController {
       @ApiResponse(code = 200, message = "OK", response = ProfessionalResponseDto.class),
       @ApiResponse(code = 400, message = "Datos proporcionados no válidos", response = ErrorResponseDto.class),
       @ApiResponse(code = 404, message = "Profesional no encontrado", response = ErrorResponseDto.class),
-      @ApiResponse(code = 503, message = "Servicio no disponible", response = ErrorResponseDto.class)
+      @ApiResponse(code = 500, message = "Servicio no disponible", response = ErrorResponseDto.class)
   })
   @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ProfessionalResponseDto> update(@ApiParam(name = "id", value = "Id del "
-      + "profesional a actualizar", required = true) @PathVariable Long id,
+      + "profesional a actualizar", example = "1", required = true) @PathVariable Long id,
       @ApiParam(name = "professional", value = "JSON con los nuevos datos del profesional",
           required = true) @Valid @RequestBody UpdateProfessionalRequestDto request) {
 
@@ -139,13 +139,13 @@ public class ProfessionalController {
 
   @ApiOperation("Borra un profesional")
   @ApiResponses({
-      @ApiResponse(code = 200, message = "OK", response = Integer.class),
+      @ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 400, message = "Datos proporcionados no válidos", response = ErrorResponseDto.class),
       @ApiResponse(code = 404, message = "Profesional no encontrado", response = ErrorResponseDto.class),
-      @ApiResponse(code = 503, message = "Servicio no disponible", response = ErrorResponseDto.class)
+      @ApiResponse(code = 500, message = "Servicio no disponible", response = ErrorResponseDto.class)
   })
   @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public int delete(@ApiParam(name = "id", value = "Id del profesional a borrar", required = true)
+  public int delete(@ApiParam(name = "id", value = "Id del profesional a borrar", example = "1", required = true)
       @PathVariable Long id) {
 
     service.delete(id);

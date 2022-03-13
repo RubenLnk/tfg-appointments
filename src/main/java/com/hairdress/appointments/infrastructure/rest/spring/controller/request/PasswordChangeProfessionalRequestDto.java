@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class PasswordChangeRequestDto {
+public class PasswordChangeProfessionalRequestDto {
 
   @ApiModelProperty(value = "UID del profesional", example = "rjr17")
   @NotNull(message = "El UID del profesional es obligatorio")

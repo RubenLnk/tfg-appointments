@@ -19,8 +19,8 @@ create table clientes (
     apellido2 varchar(30),
     telefono varchar(30) unique not null,
     correo varchar(50) unique,
-    password varchar not null,
-    salt varchar not null,
+    password varchar,
+    salt varchar,
     fecha_creacion timestamp not null,
     fecha_modificacion timestamp not null
 );
