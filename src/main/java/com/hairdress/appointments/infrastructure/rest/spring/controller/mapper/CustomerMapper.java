@@ -27,7 +27,6 @@ public interface CustomerMapper {
         target.setSurname1(source.getSurname1());
         target.setSurname2(source.getSurname2());
         target.setPhone(source.getPhone());
-        target.setModificationDate(new Timestamp(System.currentTimeMillis()));
 
         return target;
     }

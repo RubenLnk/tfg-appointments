@@ -24,7 +24,6 @@ public interface ProfessionalMapper {
     target.setName(source.getName());
     target.setSurname1(source.getSurname1());
     target.setSurname2(source.getSurname2());
-    target.setModificationDate(timestampNow());
 
     return target;
   }

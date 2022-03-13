@@ -116,7 +116,6 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setEmail(email);
         customer.setRegistered(true);
         customer.setFirstConnection(true);
-        customer.setModificationDate(new Timestamp(System.currentTimeMillis()));
 
         return repository.save(customer);
     }
@@ -160,7 +159,6 @@ public class CustomerServiceImpl implements CustomerService {
 
             customer.setSalt(newSalt);
             customer.setPassword(newEncryptedPassword);
-            customer.setModificationDate(new Timestamp(System.currentTimeMillis()));
         } catch (Exception e) {
             log.error("Se ha producido un error al generar la nueva contraseña del cliente", e);
             throw new GenericException("Se ha producido un error inesperado al cambiar la contraseña",
