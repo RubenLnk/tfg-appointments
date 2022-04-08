@@ -1,5 +1,6 @@
 package com.hairdress.appointments.infrastructure.bbdd.models;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "servicios")
 @EqualsAndHashCode(of = "id")
 @Entity
-public class Service {
+public class Service implements Serializable {
 
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Id

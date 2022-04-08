@@ -9,7 +9,6 @@ import com.hairdress.appointments.infrastructure.error.exception.UserAlreadyExis
 import com.hairdress.appointments.infrastructure.rest.spring.controller.mapper.ProfessionalMapper;
 import com.hairdress.appointments.infrastructure.security.SecurePasswordStorage;
 import com.hairdress.appointments.infrastructure.service.ProfessionalService;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -22,6 +21,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProfessionalServiceImpl implements ProfessionalService {
 
+  public static final String PROFESSIONAL_ID_NOT_FOUND = "No se pudo encontrar en la BD el profesional con id: {}";
+  public static final String PROFESSIONAL_ID_NOT_FOUND_EXCEPTION_TEXT = "No se pudo encontrar al profesional con id: ";
   private final ProfessionalRepository repository;
   private final ProfessionalMapper mapper;
 
@@ -30,8 +31,8 @@ public class ProfessionalServiceImpl implements ProfessionalService {
     Optional<Professional> opt = repository.findById(id);
 
     if (opt.isEmpty()) {
-      log.error("No se pudo encontrar en la BD el profesional con id: {}", id);
-      throw new ModelNotFoundException("No se pudo encontrar al profesional con id: " + id);
+      log.error(PROFESSIONAL_ID_NOT_FOUND, id);
+      throw new ModelNotFoundException(PROFESSIONAL_ID_NOT_FOUND_EXCEPTION_TEXT + id);
     }
 
     return opt.get();
@@ -53,18 +54,12 @@ public class ProfessionalServiceImpl implements ProfessionalService {
       throw new UserAlreadyExistsException("El usuario ya existe");
     }
 
-    try {
-      String salt = SecurePasswordStorage.getNewSalt();
-      String encryptedPassword = SecurePasswordStorage.getEncryptedPassword(
-          professionalToSignUp.getPassword(), salt);
+    String salt = SecurePasswordStorage.getNewSalt();
+    String encryptedPassword = SecurePasswordStorage.getEncryptedPassword(
+        professionalToSignUp.getPassword(), salt);
 
-      professionalToSignUp.setSalt(salt);
-      professionalToSignUp.setPassword(encryptedPassword);
-    } catch (Exception e) {
-      log.error("Se ha producido un error al crear la contraseña del profesional", e);
-      throw new GenericException("Se ha producido un error inesperado al dar de alta al profesional",
-          e.getCause());
-    }
+    professionalToSignUp.setSalt(salt);
+    professionalToSignUp.setPassword(encryptedPassword);
 
     return repository.save(professionalToSignUp);
   }
@@ -81,16 +76,8 @@ public class ProfessionalServiceImpl implements ProfessionalService {
 
     Professional professional = opt.get();
 
-    String encryptedPassword;
-
-    try {
-      encryptedPassword = SecurePasswordStorage.getEncryptedPassword(
+    String encryptedPassword = SecurePasswordStorage.getEncryptedPassword(
           password, professional.getSalt());
-    } catch (Exception e) {
-      log.error("Se ha producido un error al comprobrar la contraseña del profesional", e);
-      throw new GenericException("Se ha producido un error inesperado al autenticar al profesional",
-          e.getCause());
-    }
 
     if (!encryptedPassword.equals(professional.getPassword())) {
       throw new AuthorizationException("El usuario o la contraseña proporcionados no son correctos");
@@ -109,17 +96,9 @@ public class ProfessionalServiceImpl implements ProfessionalService {
 
     Professional professional = opt.get();
 
-    String oldEncryptedPassword;
-
     // Obtenemos la contraseña antigua cifrada
-    try {
-      oldEncryptedPassword = SecurePasswordStorage.getEncryptedPassword(
-          oldPassword, professional.getSalt());
-    } catch (Exception e) {
-      log.error("Se ha producido un error al comprobrar la contraseña antigua del profesional", e);
-      throw new GenericException("Se ha producido un error inesperado al cambiar la contraseña",
-          e.getCause());
-    }
+    String oldEncryptedPassword = SecurePasswordStorage.getEncryptedPassword(
+        oldPassword, professional.getSalt());
 
     // Si la contraseña que ha introducido el usuario no es la misma, devolvemos una excepcion
     if (!oldEncryptedPassword.equals(professional.getPassword())) {
@@ -129,18 +108,12 @@ public class ProfessionalServiceImpl implements ProfessionalService {
     }
 
     // Creamos un salt nuevo y ciframos la nueva contraseña, y guardamos el profesional
-    try {
-      String newSalt = SecurePasswordStorage.getNewSalt();
-      String newEncryptedPassword = SecurePasswordStorage.getEncryptedPassword(
-          newPassword, newSalt);
+    String newSalt = SecurePasswordStorage.getNewSalt();
+    String newEncryptedPassword = SecurePasswordStorage.getEncryptedPassword(
+        newPassword, newSalt);
 
-      professional.setSalt(newSalt);
-      professional.setPassword(newEncryptedPassword);
-    } catch (Exception e) {
-      log.error("Se ha producido un error al generar la nueva contraseña del profesional", e);
-      throw new GenericException("Se ha producido un error inesperado al cambiar la contraseña",
-          e.getCause());
-    }
+    professional.setSalt(newSalt);
+    professional.setPassword(newEncryptedPassword);
 
     repository.save(professional);
   }
@@ -152,8 +125,8 @@ public class ProfessionalServiceImpl implements ProfessionalService {
     Optional<Professional> opt = repository.findById(id);
 
     if (opt.isEmpty()) {
-      log.error("No se pudo encontrar en la BD el profesional con id: {}", id);
-      throw new ModelNotFoundException("No se pudo encontrar al profesional con id: " + id);
+      log.error(PROFESSIONAL_ID_NOT_FOUND, id);
+      throw new ModelNotFoundException(PROFESSIONAL_ID_NOT_FOUND_EXCEPTION_TEXT + id);
     }
 
     var professionalToSave = mapper.updateProfessionalData(updateProfessional, opt.get());
@@ -167,8 +140,8 @@ public class ProfessionalServiceImpl implements ProfessionalService {
     Optional<Professional> opt = repository.findById(id);
 
     if (opt.isEmpty()) {
-      log.error("No se pudo encontrar en la BD el profesional con id: {}", id);
-      throw new ModelNotFoundException("No se pudo encontrar al profesional con id: " + id);
+      log.error(PROFESSIONAL_ID_NOT_FOUND, id);
+      throw new ModelNotFoundException(PROFESSIONAL_ID_NOT_FOUND_EXCEPTION_TEXT + id);
     }
 
     repository.delete(opt.get());

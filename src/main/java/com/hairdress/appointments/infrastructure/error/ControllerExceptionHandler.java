@@ -4,6 +4,7 @@ import com.hairdress.appointments.infrastructure.error.exception.AuthorizationEx
 import com.hairdress.appointments.infrastructure.error.exception.BadRequestException;
 import com.hairdress.appointments.infrastructure.error.exception.GenericException;
 import com.hairdress.appointments.infrastructure.error.exception.ModelNotFoundException;
+import com.hairdress.appointments.infrastructure.error.exception.SecurePasswordException;
 import com.hairdress.appointments.infrastructure.error.exception.UserAlreadyExistsException;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.response.ErrorResponseDto;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Slf4j
 @ControllerAdvice
-public class ControllerExceptionsHandler {
+public class ControllerExceptionHandler {
 
   private static final String ERROR_MESSAGE = "errorMessage";
 
@@ -84,10 +85,10 @@ public class ControllerExceptionsHandler {
         .body(new ErrorResponseDto(String.valueOf(HttpStatus.BAD_REQUEST.value()), msg));
   }
 
-  @ExceptionHandler({GenericException.class, Exception.class})
+  @ExceptionHandler({SecurePasswordException.class, GenericException.class, Exception.class})
   public ResponseEntity<ErrorResponseDto> errorNotControlledExceptions(Exception e) {
     var msg = e.getMessage();
-    log.error("Exception Handler - NotControlledExceptions - {}", msg, e);
+    log.error("Exception Handler - Generic Exceptions - {}", msg, e);
 
     return ResponseEntity
         .status(HttpStatus.INTERNAL_SERVER_ERROR)

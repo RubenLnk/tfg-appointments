@@ -3,7 +3,6 @@ package com.hairdress.appointments.infrastructure.rest.spring.controller;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.mapper.CustomerMapper;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.request.PasswordChangeCustomerRequestDto;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.request.SignInCustomerRequestDto;
-import com.hairdress.appointments.infrastructure.rest.spring.controller.request.SignInProfessionalRequestDto;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.request.SignUpCustomerRequestDto;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.request.UpdateCustomerRequestDto;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.response.CustomerResponseDto;
