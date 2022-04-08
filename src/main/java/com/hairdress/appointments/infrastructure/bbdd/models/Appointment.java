@@ -1,5 +1,6 @@
 package com.hairdress.appointments.infrastructure.bbdd.models;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "citas")
 @EqualsAndHashCode(of = "id")
 @Entity
-public class Appointment {
+public class Appointment implements Serializable {
 
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Id

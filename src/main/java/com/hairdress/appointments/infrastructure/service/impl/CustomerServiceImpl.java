@@ -4,13 +4,11 @@ import com.hairdress.appointments.infrastructure.bbdd.models.Customer;
 import com.hairdress.appointments.infrastructure.bbdd.repositories.CustomerRepository;
 import com.hairdress.appointments.infrastructure.error.exception.AuthorizationException;
 import com.hairdress.appointments.infrastructure.error.exception.BadRequestException;
-import com.hairdress.appointments.infrastructure.error.exception.GenericException;
 import com.hairdress.appointments.infrastructure.error.exception.ModelNotFoundException;
 import com.hairdress.appointments.infrastructure.error.exception.UserAlreadyExistsException;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.mapper.CustomerMapper;
 import com.hairdress.appointments.infrastructure.security.SecurePasswordStorage;
 import com.hairdress.appointments.infrastructure.service.CustomerService;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -23,6 +21,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
+    public static final String CUSTOMER_ID_NOT_FOUND = "No se pudo encontrar en la BD el cliente con id: {}";
+    public static final String CUSTOMER_ID_NOT_FOUND_EXCEPTION = "No se pudo encontrar el cliente con id: ";
+    public static final String CUSTOMER_PHONE_NOT_FOUND = "No se pudo encontrar en la BD el cliente con teléfono: {}";
+    public static final String CUSTOMER_PHONE_NOT_FOUND_EXCEPTION = "No se pudo encontrar el cliente con el teléfono: ";
+    public static final String CUSTOMER_EMAIL_NOT_FOUND = "No existe un cliente con correo {}";
+    public static final String CUSTOMER_EMAIL_NOT_FOUND_EXCEPTION = "El email introducido no es correcto";
     private final CustomerRepository repository;
     private final CustomerMapper mapper;
 
@@ -36,8 +40,8 @@ public class CustomerServiceImpl implements CustomerService {
         Optional<Customer> opt = repository.findById(id);
 
         if (opt.isEmpty()) {
-            log.error("No se pudo encontrar en la BD el cliente con id: {}", id);
-            throw new ModelNotFoundException("No se pudo encontrar el cliente con id: " + id);
+            log.error(CUSTOMER_ID_NOT_FOUND, id);
+            throw new ModelNotFoundException(CUSTOMER_ID_NOT_FOUND_EXCEPTION + id);
         }
 
         return opt.get();
@@ -48,8 +52,8 @@ public class CustomerServiceImpl implements CustomerService {
         Optional<Customer> opt = repository.findByPhone(phone);
 
         if (opt.isEmpty()) {
-            log.error("No se pudo encontrar en la BD el cliente con teléfono: {}", phone);
-            throw new ModelNotFoundException("No se pudo encontrar el cliente con el teléfono: " + phone);
+            log.error(CUSTOMER_PHONE_NOT_FOUND, phone);
+            throw new ModelNotFoundException(CUSTOMER_PHONE_NOT_FOUND_EXCEPTION + phone);
         }
 
         return opt.get();
@@ -57,14 +61,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public boolean isFirstConnection(String email) {
-        Optional<Customer> opt = repository.findByEmail(email);
-
-        if (opt.isEmpty()) {
-            log.error("No existe un cliente con correo {}", email);
-            throw new AuthorizationException("El email introducido no es correcto");
-        }
-
-        Customer customer = opt.get();
+        Customer customer = getCustomer(email, repository.findByEmail(email));
 
         return customer.getRegistered() && customer.getFirstConnection();
     }
@@ -123,14 +120,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void firstConnection(String email, String password) {
-        Optional<Customer> opt = repository.findByEmail(email);
-
-        if (opt.isEmpty()) {
-            log.error("No existe un cliente con correo {}", email);
-            throw new AuthorizationException("El email introducido no es correcto");
-        }
-
-        Customer customer = opt.get();
+        Customer customer = getCustomer(email, repository.findByEmail(email));
 
         if (customer.getRegistered() && customer.getFirstConnection()) {
             // Creamos un salt nuevo y ciframos la nueva contraseña, y guardamos el cliente
@@ -140,10 +130,10 @@ public class CustomerServiceImpl implements CustomerService {
 
             repository.save(customer);
         } else {
-            if (!customer.getRegistered()) {
+            if (Boolean.FALSE.equals(customer.getRegistered())) {
                 log.error("El cliente con correo {} no esta dado de alta", customer.getEmail());
                 throw new BadRequestException("El correo introducido no está dado de alta");
-            } else if (!customer.getFirstConnection()) {
+            } else if (Boolean.FALSE.equals(customer.getFirstConnection())) {
                 log.error("El cliente con correo {} ya ha realizado su primera conexión",
                     customer.getEmail());
                 throw new BadRequestException("El correo introducido ya ha realizado su primera conexión");
@@ -152,18 +142,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     private void generateNewPassword(String password, Customer customer) {
-        try {
-            String newSalt = SecurePasswordStorage.getNewSalt();
-            String newEncryptedPassword = SecurePasswordStorage.getEncryptedPassword(
-                password, newSalt);
+        String newSalt = SecurePasswordStorage.getNewSalt();
+        String newEncryptedPassword = SecurePasswordStorage.getEncryptedPassword(
+            password, newSalt);
 
-            customer.setSalt(newSalt);
-            customer.setPassword(newEncryptedPassword);
-        } catch (Exception e) {
-            log.error("Se ha producido un error al generar la nueva contraseña del cliente", e);
-            throw new GenericException("Se ha producido un error inesperado al cambiar la contraseña",
-                e.getCause());
-        }
+        customer.setSalt(newSalt);
+        customer.setPassword(newEncryptedPassword);
     }
 
     @Override
@@ -173,8 +157,8 @@ public class CustomerServiceImpl implements CustomerService {
         Optional<Customer> opt = repository.findById(id);
 
         if (opt.isEmpty()) {
-            log.error("No se pudo encontrar en la BD el cliente con id: {}", id);
-            throw new ModelNotFoundException("No se pudo encontrar el cliente con id: " + id);
+            log.error(CUSTOMER_ID_NOT_FOUND, id);
+            throw new ModelNotFoundException(CUSTOMER_ID_NOT_FOUND_EXCEPTION + id);
         }
 
         var customerToSave = mapper.updateCustomerData(customerToUpdate, opt.get());
@@ -188,8 +172,8 @@ public class CustomerServiceImpl implements CustomerService {
         Optional<Customer> opt = repository.findById(id);
 
         if (opt.isEmpty()) {
-            log.error("No se pudo encontrar en la BD el cliente con id: {}", id);
-            throw new ModelNotFoundException("No se pudo encontrar el cliente con id: " + id);
+            log.error(CUSTOMER_ID_NOT_FOUND, id);
+            throw new ModelNotFoundException(CUSTOMER_ID_NOT_FOUND_EXCEPTION + id);
         }
 
         repository.delete(opt.get());
@@ -198,26 +182,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void changePassword(String email, String oldPassword, String newPassword) {
-        Optional<Customer> opt = repository.findByEmailAndRegisteredTrueAndFirstConnectionFalse(email);
-
-        if (opt.isEmpty()) {
-            log.error("No existe un cliente con correo {}", email);
-            throw new AuthorizationException("El email introducido no es correcto");
-        }
-
-        Customer customer = opt.get();
-
-        String oldEncryptedPassword;
+        Customer customer = getRegisteredCustomer(email);
 
         // Obtenemos la contraseña antigua cifrada
-        try {
-            oldEncryptedPassword = SecurePasswordStorage.getEncryptedPassword(
-                oldPassword, customer.getSalt());
-        } catch (Exception e) {
-            log.error("Se ha producido un error al comprobrar la contraseña antigua del cliente", e);
-            throw new GenericException("Se ha producido un error inesperado al cambiar la contraseña",
-                e.getCause());
-        }
+        String oldEncryptedPassword = SecurePasswordStorage.getEncryptedPassword(
+            oldPassword, customer.getSalt());
 
         // Si la contraseña que ha introducido el usuario no es la misma, devolvemos una excepcion
         if (!oldEncryptedPassword.equals(customer.getPassword())) {
@@ -232,30 +201,37 @@ public class CustomerServiceImpl implements CustomerService {
         repository.save(customer);
     }
 
-    @Override
-    public void login(String email, String password) {
+    private Customer getRegisteredCustomer(String email) {
         Optional<Customer> opt = repository.findByEmailAndRegisteredTrueAndFirstConnectionFalse(email);
 
         if (opt.isEmpty()) {
-            log.error("No existe un cliente con correo {}", email);
-            throw new AuthorizationException("El email introducido no es correcto");
+            log.error(CUSTOMER_EMAIL_NOT_FOUND, email);
+            throw new AuthorizationException(CUSTOMER_EMAIL_NOT_FOUND_EXCEPTION);
         }
 
-        Customer customer = opt.get();
+        return opt.get();
+    }
 
-        String encryptedPassword;
+    @Override
+    public void login(String email, String password) {
+        Customer customer = getCustomer(email,
+            repository.findByEmailAndRegisteredTrueAndFirstConnectionFalse(email));
 
-        try {
-            encryptedPassword = SecurePasswordStorage.getEncryptedPassword(
-                password, customer.getSalt());
-        } catch (Exception e) {
-            log.error("Se ha producido un error al comprobrar la contraseña del cliente", e);
-            throw new GenericException("Se ha producido un error inesperado al autenticar al cliente",
-                e.getCause());
-        }
+        String encryptedPassword = SecurePasswordStorage.getEncryptedPassword(
+            password, customer.getSalt());
 
         if (!encryptedPassword.equals(customer.getPassword())) {
             throw new AuthorizationException("El usuario o la contraseña proporcionados no son correctos");
         }
+    }
+
+    private Customer getCustomer(String email, Optional<Customer> optCustomer) {
+
+        if (optCustomer.isEmpty()) {
+            log.error(CUSTOMER_EMAIL_NOT_FOUND, email);
+            throw new AuthorizationException(CUSTOMER_EMAIL_NOT_FOUND_EXCEPTION);
+        }
+
+        return optCustomer.get();
     }
 }
