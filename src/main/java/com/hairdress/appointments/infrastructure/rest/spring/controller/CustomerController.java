@@ -48,7 +48,7 @@ public class CustomerController {
         @ApiResponse(code = 500, message = "Servicio no disponible", response = ErrorResponseDto.class)
     })
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CustomerResponseDto>> getAll() {
+    public ResponseEntity<List<CustomerResponseDto>> findAll() {
         return ResponseEntity.ok().body(service.findAll().stream().map(mapper::toDto)
             .collect(Collectors.toList()));
     }

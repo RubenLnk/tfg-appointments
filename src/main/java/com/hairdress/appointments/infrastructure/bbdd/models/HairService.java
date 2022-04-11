@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "servicios")
 @EqualsAndHashCode(of = "id")
 @Entity
-public class Service implements Serializable {
+public class HairService implements Serializable {
 
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Id

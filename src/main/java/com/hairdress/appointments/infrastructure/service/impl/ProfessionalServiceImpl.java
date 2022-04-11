@@ -23,6 +23,7 @@ public class ProfessionalServiceImpl implements ProfessionalService {
 
   public static final String PROFESSIONAL_ID_NOT_FOUND = "No se pudo encontrar en la BD el profesional con id: {}";
   public static final String PROFESSIONAL_ID_NOT_FOUND_EXCEPTION_TEXT = "No se pudo encontrar al profesional con id: ";
+
   private final ProfessionalRepository repository;
   private final ProfessionalMapper mapper;
 

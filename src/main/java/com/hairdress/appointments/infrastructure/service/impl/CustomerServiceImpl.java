@@ -27,6 +27,7 @@ public class CustomerServiceImpl implements CustomerService {
     public static final String CUSTOMER_PHONE_NOT_FOUND_EXCEPTION = "No se pudo encontrar el cliente con el teléfono: ";
     public static final String CUSTOMER_EMAIL_NOT_FOUND = "No existe un cliente con correo {}";
     public static final String CUSTOMER_EMAIL_NOT_FOUND_EXCEPTION = "El email introducido no es correcto";
+    
     private final CustomerRepository repository;
     private final CustomerMapper mapper;
 

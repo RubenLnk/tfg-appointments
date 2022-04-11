@@ -37,11 +37,12 @@ create table servicios (
 
 create table citas (
     cita_id serial primary key,
-    fecha_cita timestamp not null,
+    fecha_inicio_cita timestamp not null,
+    fecha_fin_cita timestamp not null,
     precio numeric(6,2) not null,
     observaciones text,
     cliente_id int not null,
-    profesional_creador int not null,
+    profesional_creador int,
     activo bool not null default true,
     fecha_creacion timestamp not null,
     fecha_modificacion timestamp not null,

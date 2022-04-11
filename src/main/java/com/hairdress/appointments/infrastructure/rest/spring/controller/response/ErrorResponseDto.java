@@ -10,10 +10,10 @@ import lombok.Data;
 public class ErrorResponseDto {
 
   @ApiModelProperty(value = "Código de error", example = "XXX")
-  @JsonProperty("codigo")
+  @JsonProperty("code")
   private String code;
 
   @ApiModelProperty(value = "Descripción del error", example = "Resource Not Found")
-  @JsonProperty("descripcion")
+  @JsonProperty("description")
   private String description;
 }

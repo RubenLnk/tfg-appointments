@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/service")
 @RequiredArgsConstructor
-public class ServiceController {
+public class HairServiceController {
 
 }

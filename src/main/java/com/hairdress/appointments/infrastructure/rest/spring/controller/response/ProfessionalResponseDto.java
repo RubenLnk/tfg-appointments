@@ -20,14 +20,14 @@ public class ProfessionalResponseDto {
   private String uid;
 
   @ApiModelProperty(value = "Nombre del profesional", example = "Juan")
-  @JsonProperty("nombre")
+  @JsonProperty("name")
   private String name;
 
   @ApiModelProperty(value = "Primer apellido del profesional", example = "Fernandez")
-  @JsonProperty("apellido1")
+  @JsonProperty("surname1")
   private String surname1;
 
   @ApiModelProperty(value = "Segundo apellido del profesional", example = "Lozano")
-  @JsonProperty("apellido2")
+  @JsonProperty("surname2")
   private String surname2;
 }

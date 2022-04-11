@@ -61,7 +61,7 @@ public class ProfessionalController {
       @ApiResponse(code = 500, message = "Servicio no disponible", response = ErrorResponseDto.class)
   })
   @GetMapping(value="", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<ProfessionalResponseDto>> getAll() {
+  public ResponseEntity<List<ProfessionalResponseDto>> findAll() {
     return ResponseEntity.ok().body(service.findAll().stream().map(mapper::toDto)
         .collect(Collectors.toList()));
   }
