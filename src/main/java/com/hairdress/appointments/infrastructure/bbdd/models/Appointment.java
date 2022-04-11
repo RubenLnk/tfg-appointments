@@ -30,8 +30,11 @@ public class Appointment implements Serializable {
   @Column(name = "cita_id", unique = true, nullable = false, updatable = false)
   private Long id;
 
-  @Column(name = "fecha_cita")
-  private Timestamp appointmentDate;
+  @Column(name = "fecha_inicio_cita")
+  private Timestamp appointmentInitDate;
+
+  @Column(name = "fecha_fin_cita")
+  private Timestamp appointmentEndDate;
 
   @Column(name = "precio")
   private Double price;
@@ -59,10 +62,10 @@ public class Appointment implements Serializable {
   @Column(name = "fecha_anulacion")
   private Timestamp cancellationDate;
 
-  @ManyToMany(cascade = CascadeType.ALL)
+  @ManyToMany(cascade = CascadeType.PERSIST)
   @JoinTable(
       name = "servicio_cita",
       joinColumns = @JoinColumn(name = "cita_id"),
       inverseJoinColumns = @JoinColumn(name = "servicio_id"))
-  private List<Service> services;
+  private List<HairService> services;
 }
