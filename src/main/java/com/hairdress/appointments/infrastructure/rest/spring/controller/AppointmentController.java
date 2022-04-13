@@ -23,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -131,5 +132,19 @@ public class AppointmentController {
 
         return ResponseEntity.ok().body(mapper.toDto(service.update(
             id, mapper.updateAppointmentRequestToEntity(request), request.getServices())));
+    }
+
+    @ApiOperation("Cancela una cita dado un ID")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK", response = AppointmentResponseDto.class),
+        @ApiResponse(code = 400, message = "Datos proporcionados no válidos", response = ErrorResponseDto.class),
+        @ApiResponse(code = 404, message = "Cita no encontrada", response = ErrorResponseDto.class),
+        @ApiResponse(code = 500, message = "Servicio no disponible", response = ErrorResponseDto.class)
+    })
+    @PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AppointmentResponseDto> cancel(@ApiParam(name = "id",
+        value = "ID de la cita", example = "1", required = true) @PathVariable("id") Long id) {
+
+        return ResponseEntity.ok().body(mapper.toDto(service.cancel(id)));
     }
 }

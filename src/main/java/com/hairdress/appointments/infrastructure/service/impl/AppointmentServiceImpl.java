@@ -107,6 +107,17 @@ public class AppointmentServiceImpl implements AppointmentService {
         return repository.save(appointmentToSave);
     }
 
+    @Override
+    public Appointment cancel(Long id) {
+
+        Appointment appointment = findById(id);
+
+        appointment.setActive(false);
+        appointment.setCancellationDate(new Timestamp(System.currentTimeMillis()));
+
+        return repository.save(appointment);
+    }
+
     private void checkConflictingDates(Appointment appointmentToSave) {
         var appointmentsInSameDay = repository
             .findAppointmentsWithConflictingDates(
