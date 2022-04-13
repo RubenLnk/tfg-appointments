@@ -4,13 +4,12 @@ import com.hairdress.appointments.infrastructure.bbdd.models.Customer;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.request.SignUpCustomerRequestDto;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.request.UpdateCustomerRequestDto;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.response.CustomerResponseDto;
-import java.sql.Timestamp;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface CustomerMapper {
+public interface CustomerMapper extends GenericMapper {
 
     @Mapping(target = "registered", expression = "java(source.getEmail() != null)")
     @Mapping(target = "firstConnection", expression = "java(source.getEmail() != null)")
@@ -29,9 +28,5 @@ public interface CustomerMapper {
         target.setPhone(source.getPhone());
 
         return target;
-    }
-
-    default Timestamp timestampNow() {
-        return new Timestamp(System.currentTimeMillis());
     }
 }

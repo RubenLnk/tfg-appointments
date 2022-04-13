@@ -1,5 +1,6 @@
 package com.hairdress.appointments.infrastructure.rest.spring.controller.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,11 +23,13 @@ public class AppointmentResponseDto {
 
     @ApiModelProperty(value = "Fecha de inicio de la cita",
         example = "2022-04-09T14:45:21.048+00:00")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "Europe/Madrid")
     @JsonProperty("appointmentInitDate")
     private Timestamp appointmentInitDate;
 
     @ApiModelProperty(value = "Fecha de fin de la cita",
         example = "2022-04-09T16:45:21.048+00:00")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "Europe/Madrid")
     @JsonProperty("appointmentEndDate")
     private Timestamp appointmentEndDate;
 
@@ -53,6 +56,7 @@ public class AppointmentResponseDto {
 
     @ApiModelProperty(value = "Fecha de cancelación (si la cita ha sido cancelada)",
         example = "2022-04-09T14:45:21.048+00:00")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "Europe/Madrid")
     @JsonProperty("cancellationDate")
     private Timestamp cancellationDate;
 

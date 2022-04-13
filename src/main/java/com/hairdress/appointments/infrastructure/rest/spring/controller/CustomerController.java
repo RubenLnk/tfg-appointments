@@ -125,7 +125,7 @@ public class CustomerController {
         @ApiResponse(code = 404, message = "Cliente no encontrado", response = ErrorResponseDto.class),
         @ApiResponse(code = 500, message = "Servicio no disponible", response = ErrorResponseDto.class)
     })
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}")
     public int deleteCustomer(
         @ApiParam(name = "id", value = "ID del cliente", example = "1", required = true)
         @PathVariable("id") Long id) {

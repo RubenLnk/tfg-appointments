@@ -106,7 +106,7 @@ public class AppointmentController {
         @ApiResponse(code = 404, message = "Cita no encontrada", response = ErrorResponseDto.class),
         @ApiResponse(code = 500, message = "Servicio no disponible", response = ErrorResponseDto.class)
     })
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}")
     public int delete(@ApiParam(name = "id",
         value = "ID de la cita", example = "1", required = true) @PathVariable("id") Long id) {
 
@@ -122,7 +122,8 @@ public class AppointmentController {
         @ApiResponse(code = 404, message = "Cita no encontrada", response = ErrorResponseDto.class),
         @ApiResponse(code = 500, message = "Servicio no disponible", response = ErrorResponseDto.class)
     })
-    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AppointmentResponseDto> update(@ApiParam(name = "id",
         value = "ID de la cita", example = "1", required = true) @PathVariable("id") Long id,
         @ApiParam(name = "request", value = "Request para la actualización de cita",
