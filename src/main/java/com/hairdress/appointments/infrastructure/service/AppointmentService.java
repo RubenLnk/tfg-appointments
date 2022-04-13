@@ -17,4 +17,6 @@ public interface AppointmentService {
     void delete(Long id);
 
     Appointment update(Long id, Appointment appointmentToUpdate, List<Long> services);
+
+    Appointment cancel(Long id);
 }

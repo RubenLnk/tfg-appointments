@@ -286,4 +286,31 @@ class AppointmentServiceTest extends Specification {
         then:
         1 * repository.save(_ as Appointment)
     }
+
+    def "cancel does not find appointment"() {
+        given:
+        repository.findById(_ as Long) >> Optional.empty()
+
+        when:
+        service.cancel(1L)
+
+        then:
+        thrown(ModelNotFoundException)
+    }
+
+    def "cancel successful"() {
+        given:
+        def newAppointment = new Appointment()
+        repository.findById(_ as Long) >> Optional.of(newAppointment)
+
+        when:
+        def result = service.cancel(1L)
+
+        then:
+        with(result) {
+            !it.active
+            it.cancellationDate != null
+        }
+        1 * repository.save(_ as Appointment) >> newAppointment
+    }
 }
