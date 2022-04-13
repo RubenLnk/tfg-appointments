@@ -5,7 +5,6 @@ import com.hairdress.appointments.infrastructure.bbdd.models.Professional;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.request.CreateAppointmentRequestDto;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.request.UpdateAppointmentRequestDto;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.response.AppointmentResponseDto;
-import java.sql.Timestamp;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -13,7 +12,7 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
     uses = {CustomerMapper.class, ProfessionalMapper.class, HairServiceMapper.class})
-public interface AppointmentMapper {
+public interface AppointmentMapper extends GenericMapper {
 
     AppointmentResponseDto toDto(Appointment source);
 
@@ -27,10 +26,6 @@ public interface AppointmentMapper {
 
     @Mapping(target = "services", ignore = true)
     Appointment updateAppointmentRequestToEntity(UpdateAppointmentRequestDto source);
-
-    default Timestamp timestampNow() {
-        return new Timestamp(System.currentTimeMillis());
-    }
 
     default Appointment updateAppointmentData(Appointment source, Appointment target) {
         target.setAppointmentInitDate(source.getAppointmentInitDate());

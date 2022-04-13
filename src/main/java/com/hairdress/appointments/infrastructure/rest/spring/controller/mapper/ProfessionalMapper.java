@@ -4,13 +4,12 @@ import com.hairdress.appointments.infrastructure.bbdd.models.Professional;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.request.SignUpProfessionalRequestDto;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.request.UpdateProfessionalRequestDto;
 import com.hairdress.appointments.infrastructure.rest.spring.controller.response.ProfessionalResponseDto;
-import java.sql.Timestamp;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface ProfessionalMapper {
+public interface ProfessionalMapper extends GenericMapper {
 
   ProfessionalResponseDto toDto(Professional source);
 
@@ -26,9 +25,5 @@ public interface ProfessionalMapper {
     target.setSurname2(source.getSurname2());
 
     return target;
-  }
-
-  default Timestamp timestampNow() {
-    return new Timestamp(System.currentTimeMillis());
   }
 }

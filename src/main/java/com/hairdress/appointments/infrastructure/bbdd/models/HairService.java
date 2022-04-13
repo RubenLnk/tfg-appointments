@@ -41,4 +41,10 @@ public class HairService implements Serializable {
 
   @Column(name = "fecha_modificacion")
   private Timestamp modificationDate;
+
+  @Column(name = "activo")
+  private Boolean active;
+
+  @Column(name = "fecha_anulacion")
+  private Timestamp cancellationDate;
 }
