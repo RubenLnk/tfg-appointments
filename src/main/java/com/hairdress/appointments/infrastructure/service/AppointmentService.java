@@ -10,7 +10,7 @@ public interface AppointmentService {
 
     Appointment findById(Long id);
 
-    List<Appointment> findAllAppointmentsInADay(LocalDateTime day);
+    List<Appointment> findAllAppointmentsActivesInADay(LocalDateTime day);
 
     Appointment save(Appointment appointmentToSave, List<Long> services);
 
@@ -19,4 +19,6 @@ public interface AppointmentService {
     Appointment update(Long id, Appointment appointmentToUpdate, List<Long> services);
 
     Appointment cancel(Long id);
+
+    List<Appointment> findActivesByCustomerId(Long id);
 }
