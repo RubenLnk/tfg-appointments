@@ -67,20 +67,34 @@ public class AppointmentController {
         return ResponseEntity.ok().body(mapper.toDto(service.findById(id)));
     }
 
+    @ApiOperation("Obtener citas activas por ID de cliente")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK", response = AppointmentResponseDto.class),
+        @ApiResponse(code = 400, message = "Datos proporcionados no válidos", response = ErrorResponseDto.class),
+        @ApiResponse(code = 500, message = "Servicio no disponible", response = ErrorResponseDto.class)
+    })
+    @GetMapping(value = "/actives/by-customer/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<AppointmentResponseDto>> findActivesByCustomerId(@ApiParam(name = "id",
+        value = "ID del cliente", example = "1", required = true) @PathVariable("id") Long id) {
+
+        return ResponseEntity.ok().body(service.findActivesByCustomerId(id).stream()
+            .map(mapper::toDto).collect(Collectors.toList()));
+    }
+
     @ApiOperation("Obtener todas las citas de un día determinado")
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK", response = AppointmentResponseDto.class),
         @ApiResponse(code = 400, message = "Datos proporcionados no válidos", response = ErrorResponseDto.class),
         @ApiResponse(code = 500, message = "Servicio no disponible", response = ErrorResponseDto.class)
     })
-    @GetMapping(value = "/by-day", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/actives/by-day", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<AppointmentResponseDto>> findById(@ApiParam(name = "day",
         value = "Día del que se desea obtener las citas", example = "2022-04-09T16:45:21.048",
         required = true)
         @DateTimeFormat(iso = ISO.DATE_TIME)
         @RequestParam("day") LocalDateTime day) {
 
-        return ResponseEntity.ok().body(service.findAllAppointmentsInADay(day).stream()
+        return ResponseEntity.ok().body(service.findAllAppointmentsActivesInADay(day).stream()
             .map(mapper::toDto).collect(Collectors.toList()));
     }
 

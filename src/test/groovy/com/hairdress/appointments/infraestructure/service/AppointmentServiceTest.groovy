@@ -96,11 +96,11 @@ class AppointmentServiceTest extends Specification {
         list.add(appointment3)
 
         when:
-        def result = service.findAllAppointmentsInADay(day)
+        def result = service.findAllAppointmentsActivesInADay(day)
 
         then:
         result.size() == 3
-        1 * repository.findByAppointmentInitDateBetween(Timestamp.valueOf(initDate),
+        1 * repository.findByActiveTrueAndAppointmentInitDateBetween(Timestamp.valueOf(initDate),
                 Timestamp.valueOf(endDate)) >> list
     }
 
@@ -111,11 +111,11 @@ class AppointmentServiceTest extends Specification {
         def endDate = initDate.plusDays(1)
 
         when:
-        def result = service.findAllAppointmentsInADay(day)
+        def result = service.findAllAppointmentsActivesInADay(day)
 
         then:
         result.isEmpty()
-        1 * repository.findByAppointmentInitDateBetween(Timestamp.valueOf(initDate),
+        1 * repository.findByActiveTrueAndAppointmentInitDateBetween(Timestamp.valueOf(initDate),
                 Timestamp.valueOf(endDate)) >> new ArrayList<Appointment>()
     }
 
@@ -312,5 +312,29 @@ class AppointmentServiceTest extends Specification {
             it.cancellationDate != null
         }
         1 * repository.save(_ as Appointment) >> newAppointment
+    }
+
+    def "findActivesByCustomerId returns an empty list"() {
+        given:
+        repository.findByActiveTrueAndCustomerId(_ as Long) >> new ArrayList<Appointment>()
+
+        when:
+        def result = service.findActivesByCustomerId(1L)
+
+        then:
+        result.isEmpty()
+    }
+
+    def "findActivesByCustomerId returns a list of appointments"() {
+        given:
+        def list = new ArrayList<Appointment>()
+        list.add(appointment)
+        repository.findByActiveTrueAndCustomerId(_ as Long) >> list
+
+        when:
+        def result = service.findActivesByCustomerId(1L)
+
+        then:
+        result.size() == 1
     }
 }

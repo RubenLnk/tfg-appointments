@@ -11,13 +11,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 
-    List<Appointment> findByAppointmentInitDateBetween(Timestamp initDate, Timestamp endDate);
+    List<Appointment> findByActiveTrueAndAppointmentInitDateBetween(
+        Timestamp initDate, Timestamp endDate);
 
-  @Query("SELECT a FROM Appointment a WHERE "
-      + "(:initDate BETWEEN a.appointmentInitDate AND a.appointmentEndDate) "
+    List<Appointment> findByActiveTrueAndCustomerId(Long id);
+
+  @Query("SELECT a FROM Appointment a WHERE a.active = true "
+      + "AND ((:initDate BETWEEN a.appointmentInitDate AND a.appointmentEndDate) "
       + "OR (:endDate BETWEEN a.appointmentInitDate AND a.appointmentEndDate)"
       + "OR (a.appointmentInitDate BETWEEN :initDate AND :endDate "
-      + "AND a.appointmentEndDate BETWEEN :initDate AND :endDate)")
+      + "AND a.appointmentEndDate BETWEEN :initDate AND :endDate))")
   List<Appointment> findAppointmentsWithConflictingDates(
       @Param("initDate") Timestamp initDate, @Param("endDate") Timestamp endDate);
 }

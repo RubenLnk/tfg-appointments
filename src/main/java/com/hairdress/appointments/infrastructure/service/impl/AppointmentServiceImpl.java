@@ -57,13 +57,13 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<Appointment> findAllAppointmentsInADay(LocalDateTime day) {
+    public List<Appointment> findAllAppointmentsActivesInADay(LocalDateTime day) {
 
         LocalDateTime initDate = day.truncatedTo(ChronoUnit.DAYS);
 
         LocalDateTime endDate = initDate.plusDays(1);
 
-        return repository.findByAppointmentInitDateBetween(Timestamp.valueOf(initDate),
+        return repository.findByActiveTrueAndAppointmentInitDateBetween(Timestamp.valueOf(initDate),
             Timestamp.valueOf(endDate));
     }
 
@@ -116,6 +116,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setCancellationDate(new Timestamp(System.currentTimeMillis()));
 
         return repository.save(appointment);
+    }
+
+    @Override
+    public List<Appointment> findActivesByCustomerId(Long id) {
+        return repository.findByActiveTrueAndCustomerId(id);
     }
 
     private void checkConflictingDates(Appointment appointmentToSave) {
